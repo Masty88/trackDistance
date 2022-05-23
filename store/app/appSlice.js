@@ -1,7 +1,6 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import appService from './appService';
 
-
 //Get start position
 export const getPosition = createAsyncThunk('app/position', async thunkApi => {
   try {
@@ -18,15 +17,19 @@ const appSlice = createSlice({
     loading: true,
     latitude: null,
     longitude: null,
-
+    startCity: null,
+    endCity: null,
   },
   reducers: {
     toggleLoading: (state, action) => {
       state.loading = !state.loading;
     },
-    getPosition:(state,action)=>{
-       
-    }
+    setLatitude: (state, action) => {
+      state.latitude = action.payload;
+    },
+    setLongitude: (state, action) => {
+      state.longitude = action.payload;
+    },
   },
   // extraReducers: builder => {
   //   builder
@@ -44,5 +47,5 @@ const appSlice = createSlice({
   // },
 });
 
-export const {toggleLoading, getLatitude} = appSlice.actions;
+export const {toggleLoading, setLatitude, setLongitude} = appSlice.actions;
 export default appSlice.reducer;

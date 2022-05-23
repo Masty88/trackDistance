@@ -2,8 +2,7 @@ import React, {useEffect} from 'react';
 import {Text, View, PermissionsAndroid} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import StartScreen from './screen/StartScreen';
-import { getPosition, position } from "./store/app/appSlice";
-
+import {getPosition, position} from './store/app/appSlice';
 
 const requestLocationPermission = async () => {
   try {
@@ -66,7 +65,6 @@ const App = () => {
   const {loading} = useSelector(state => state.app);
   useEffect(() => {
     requestLocationPermission().then(r => requestLocationCoarsePermission());
-    dispatch(getPosition())
   }, []);
   return (
     <>
