@@ -2,7 +2,8 @@ import React, {useEffect} from 'react';
 import {Text, View, PermissionsAndroid} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import StartScreen from './screen/StartScreen';
-import {getPosition, position} from './store/app/appSlice';
+import { getPosition, position, toggleLoading } from "./store/app/appSlice";
+import Layout from "./components/Layout";
 
 const requestLocationPermission = async () => {
   try {
@@ -61,15 +62,14 @@ const requestLocationCoarsePermission = async () => {
 };
 
 const App = () => {
-  const dispatch= useDispatch()
-  const {loading} = useSelector(state => state.app);
+  const dispatch = useDispatch();
   useEffect(() => {
     requestLocationPermission().then(r => requestLocationCoarsePermission());
   }, []);
   return (
-    <>
-      <StartScreen />
-    </>
+    <Layout>
+      <StartScreen/>
+    </Layout>
   );
 };
 

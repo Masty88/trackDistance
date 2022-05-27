@@ -1,15 +1,20 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import appService from './appService';
+import appService from './appServices';
 
-//Get start position
-export const getPosition = createAsyncThunk('app/position', async thunkApi => {
-  try {
-    return await appService.getPosition();
-  } catch (error) {
-    const message = error.response.data.errors[0].msg;
-    return thunkApi.rejectWithValue(message);
-  }
-});
+export const getDirection = createAsyncThunk(
+  'matrix/get',
+  async (points, thunkApi) => {
+    try {
+      return await appService.getDirection(
+        points[1].coordinates,
+        points[2].coordinates,
+      );
+    } catch (error) {
+      const message = error.response;
+      return thunkApi.rejectWithValue(message);
+    }
+  },
+);
 
 const appSlice = createSlice({
   name: 'app',
@@ -17,8 +22,7 @@ const appSlice = createSlice({
     loading: true,
     latitude: null,
     longitude: null,
-    startCity: null,
-    endCity: null,
+    points: [],
   },
   reducers: {
     toggleLoading: (state, action) => {
@@ -30,22 +34,30 @@ const appSlice = createSlice({
     setLongitude: (state, action) => {
       state.longitude = action.payload;
     },
+    addPoint: (state, action) => {
+      const point = {
+        coordinates: [state.longitude, state.latitude],
+        id: Math.random() * 100,
+      };
+      state.points.push(point);
+    },
   },
-  // extraReducers: builder => {
-  //   builder
-  //     .addCase(getPosition.pending, state => {
-  //       state.loading = true;
-  //     })
-  //     .addCase(getPosition.fulfilled, (state, action) => {
-  //       state.loading = false;
-  //       state.position = action.payload;
-  //
-  //     })
-  //     .addCase(getPosition.rejected, state => {
-  //       state.loading = false;
-  //     });
-  // },
+  extraReducers: builder => {
+    builder
+      .addCase(getDirection.pending, state => {
+        state.loading = true;
+      })
+      .addCase(getDirection.fulfilled, (state, action) => {
+        state.loading = false;
+        console.log(action.payload);
+      })
+      .addCase(getDirection.rejected, (state, action) => {
+        state.loading = false;
+        console.log(action.payload);
+      });
+  },
 });
 
-export const {toggleLoading, setLatitude, setLongitude} = appSlice.actions;
+export const {toggleLoading, setLatitude, setLongitude, addPoint} =
+  appSlice.actions;
 export default appSlice.reducer;
