@@ -4,7 +4,7 @@ import axios from 'axios';
 const getDirection = async (startCoordinates, endCoordinates) => {
   const response = await axios.get(
     `https://api.mapbox.com/directions/v5/mapbox/driving/${startCoordinates};${endCoordinates}?access_token=`)
-  return response.data;
+  const res= await response.data.JSON();
 };
 
 const appService = {
